@@ -32,29 +32,10 @@ jobs:
       run: system_profiler SPSoftwareDataType
 
     - name: Install dependencies
-      run: brew install libpng libjpeg libdc1394 opencv
-
-    # Openblas location is exported explicitly because openblas is keg-only,
-    # which means it was not symlinked into /usr/local/.
-    - name: Clone and configure ViSP
-      run: |
-        git clone --depth 1 https://github.com/lagadic/visp.git ${HOME}/visp
-        cd ${HOME}/visp
-        export LDFLAGS="-L/usr/local/opt/openblas/lib"
-        export CPPFLAGS="-I/usr/local/opt/openblas/include"
-        mkdir build && cd build
-        cmake .. -DCMAKE_FIND_FRAMEWORK=LAST -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(pwd)/install
-        cat ViSP-third-party.txt
-
-    - name: Build and install ViSP
-      run: |
-        cd ${HOME}/visp/build
-        make -j2 install
-        echo "VISP_DIR=$(pwd)/install" >> $GITHUB_ENV
-        echo $VISP_DIR
+      run: brew install libpng libjpeg libdc1394 lapack eigen opencv librealsense visp
 
     - name: Configure CMake and build visp_sample
       run: |
         mkdir build && cd build
-        cmake .. -DCMAKE_FIND_FRAMEWORK=LAST -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j2
