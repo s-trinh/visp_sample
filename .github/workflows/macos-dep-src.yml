@@ -1,4 +1,4 @@
-name: MacOS
+name: MacOS-dep-sec
 
 # https://www.jeffgeerling.com/blog/2020/running-github-actions-workflow-on-schedule-and-other-events
 on:
@@ -8,7 +8,7 @@ on:
     - cron: '0 2 * * SUN'
 
 jobs:
-  build-macos:
+  build-macos-dep-sec:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -32,7 +32,7 @@ jobs:
       run: system_profiler SPSoftwareDataType
 
     - name: Install dependencies
-      run: brew install libpng libjpeg libdc1394 lapack eigen opencv librealsense
+      run: brew install libpng libjpeg libdc1394 lapack eigen opencv librealsense libxml2 pcl
 
     # Openblas location is exported explicitly because openblas is keg-only,
     # which means it was not symlinked into /usr/local/.
